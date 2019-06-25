@@ -108,9 +108,7 @@ class PocketListenEndpointTest {
         val accessToken = PocketTestResource.LISTEN_ACCESS_TOKEN.get()
         val subject = PocketListenEndpoint.newInstance(client, accessToken, "android-components:PocketListenEndpointTest")
 
-        // The input article may seem invalid but it's test data from the server docs:
-        //   https://documenter.getpostman.com/view/777613/S17jXChA#426b37e2-0a4f-bd65-35c6-e14f1b19d0f0
-        val response = subject.getListenArticleMetadata(1234, "https://news.com/my-article.html")
+        val response = subject.getListenArticleMetadata(20648, "https://www.theatlantic.com/science/archive/2018/07/find-your-passion-is-terrible-advice/564932/")
         val result = (response as? PocketResponse.Success)?.data
 
         assertNotNull(result)
