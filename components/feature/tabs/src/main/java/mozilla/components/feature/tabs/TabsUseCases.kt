@@ -5,6 +5,7 @@
 package mozilla.components.feature.tabs
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
@@ -380,11 +381,13 @@ class TabsUseCases(
             } else {
                 val session = Session(url, private, source)
                 sessionManager.add(session, selected = true)
-                store.dispatch(EngineAction.LoadUrlAction(
-                    session.id,
-                    url,
-                    flags
-                ))
+                runBlocking {
+                    store.dispatch(EngineAction.LoadUrlAction(
+                        session.id,
+                        url,
+                        flags
+                    )).join()
+                }
             }
         }
     }

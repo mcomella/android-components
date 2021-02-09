@@ -6,6 +6,7 @@ package mozilla.components.browser.session.engine.middleware
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.engine.getOrCreateEngineSession
 import mozilla.components.browser.state.action.BrowserAction
@@ -39,7 +40,7 @@ internal class EngineDelegateMiddleware(
         action: BrowserAction
     ) {
         when (action) {
-            is EngineAction.LoadUrlAction -> loadUrl(context.store, action)
+            is EngineAction.LoadUrlAction -> runBlocking { loadUrl(context.store, action).join() }
             is EngineAction.LoadDataAction -> loadData(context.store, action)
             is EngineAction.ReloadAction -> reload(context.store, action)
             is EngineAction.GoBackAction -> goBack(context.store, action)
@@ -69,7 +70,7 @@ internal class EngineDelegateMiddleware(
             // session is already pointing to. Creating an EngineSession will do exactly
             // that in the linking step. So let's do that. Otherwise we would load the URL
             // twice.
-            store.dispatch(EngineAction.CreateEngineSessionAction(action.sessionId))
+            store.dispatch(EngineAction.CreateEngineSessionAction(action.sessionId)).join()
             return@launch
         }
 

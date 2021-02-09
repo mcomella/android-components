@@ -6,6 +6,7 @@ package mozilla.components.browser.session.engine.middleware
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.engine.getOrCreateEngineSession
 import mozilla.components.browser.state.action.BrowserAction
@@ -47,16 +48,18 @@ internal class CreateEngineSessionMiddleware(
     ) {
         logger.debug("Request to create engine session for tab ${action.tabId}")
 
-        scope.launch {
-            // We only need to ask for an EngineSession here. If needed this method will internally
-            // create one and dispatch a LinkEngineSessionAction to add it to BrowserState.
-            getOrCreateEngineSession(
-                engine,
-                logger,
-                sessionLookup,
-                store,
-                action.tabId
-            )
+        runBlocking {
+            scope.launch {
+                // We only need to ask for an EngineSession here. If needed this method will internally
+                // create one and dispatch a LinkEngineSessionAction to add it to BrowserState.
+                getOrCreateEngineSession(
+                    engine,
+                    logger,
+                    sessionLookup,
+                    store,
+                    action.tabId
+                )
+            }.join()
         }
     }
 }
