@@ -46,21 +46,10 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 class StoreExtensionsKtTest {
-    private val testDispatcher = TestCoroutineDispatcher()
 
     @get:Rule
-    val coroutinesTestRule = MainCoroutineRule(testDispatcher)
-
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun teardown() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
-    }
+    val coroutinesTestRule = MainCoroutineRule()
+    private val testDispatcher = coroutinesTestRule.testDispatcher
 
     @Test
     fun `Observer will not get registered if lifecycle is already destroyed`() {
