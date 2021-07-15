@@ -11,6 +11,11 @@ permalink: /changelog/
 * [Gecko](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Gecko.kt)
 * [Configuration](https://github.com/mozilla-mobile/android-components/blob/master/.config.yml)
 
+* **support-test**
+  * ⚠️  Deprecation: `createTestCoroutinesDispatcher()` should be replaced with the preferred `TestCoroutineDispatcher()` from the `kotlinx-coroutines-test` library.
+  * ⚠️ **This is a breaking change**: `MainCoroutineRule`'s constructor takes a more strict `TestCoroutineDispatcher` instead of a `CoroutineDispatcher`
+  * 🌟️ Adds `MainCoroutineRule.runBlockingTest`, which is a convenience method for `MainCoroutineRule.testDispatcher.runBlockingTest`. These methods are preferred over the global `runBlockingTest` because they reparent new child coroutines to the test coroutine context.
+
 * **feature-search**
   * 🌟️ New `AdsTelemetry` based on a web extension that identify whether there are ads in search results of particular providers for which a (Component.FEATURE_SEARCH to SERP_SHOWN_WITH_ADDS) Fact will be emitted and whether an ad was clicked for which a (Component.FEATURE_SEARCH to SERP_ADD_CLICKED) Fact will be emitted if the `AdsTelemetryMiddleware` is set for `BrowserStore`.
   * 🌟️ New `InContentTelemetry` based on a web extension that identify follow-on and organic web searches for which a (Component.FEATURE_SEARCH to IN_CONTENT_SEARCH) Fact will be emitted.
